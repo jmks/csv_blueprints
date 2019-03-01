@@ -1,8 +1,50 @@
 # CsvBlueprints
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/csv_blueprints`. To experiment with that code, run `bin/console` for an interactive prompt.
+A simple and small DSL to generate CSV files.
 
-TODO: Delete this and the text above, and describe your gem
+Declaratively specify a CSV blueprint:
+
+```ruby
+require "csv_blueprints"
+require "faker"
+
+blueprint = CsvBlueprints.specify do
+  column "ID", value: :sequence
+  column "Name", value: -> i { Faker::Name.name }
+  columns "Login", "Email", value: -> i { "email#{i}@example.com" }
+  column "Type", static: "Client"
+  column "Notes", value: :blank
+end
+```
+
+You can now use this blueprint to build a plan. You can override column values here as well:
+
+```ruby
+# only want 3 rows
+plan = blueprint.plan.standard(3)
+
+# two rows with duplicate IDs
+plan_with_duplicate_ids = blueprint.plan.customized(2, "ID" => 999, "Notes" => "A great person")
+```
+
+Ready to write some CSVs? Just call `write(writable_io)` on the plan.
+
+`plan` would produce something like this (modulo `faker` data):
+
+```
+ID,Name,Login,Email,Type,Notes
+1,Val Kulas DVM,email1@example.com,email1@example.com,Client,
+2,Marsha Sporer,email2@example.com,email2@example.com,Client,
+3,Mrs. Bennett Bechtelar,email3@example.com,email3@example.com,Client,
+```
+
+while `plan_with_duplicate_ids` would produce something like:
+
+```
+ID,Name,Login,Email,Type,Notes
+999,Harry Cummings Sr.,email1@example.com,email1@example.com,Client,A great person
+999,Mrs. Dessie Wunsch,email2@example.com,email2@example.com,Client,A great person
+```
 
 ## Installation
 
@@ -32,7 +74,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/csv_blueprints.
+Bug reports and pull requests are welcome on GitHub at https://github.com/jmks/csv_blueprints.
 
 ## License
 
