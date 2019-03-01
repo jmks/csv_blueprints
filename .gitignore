@@ -9,3 +9,6 @@
 
 # rspec failure tracking
 .rspec_status
+
+# Gems should not include the lock file -- dependency versions are handled by the gemspec
+Gemfile.lock
