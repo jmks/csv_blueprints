@@ -9,6 +9,26 @@ module CsvBlueprints
     end
   end
 
+  class RepeatedValue
+    def initialize(callable, times)
+      @callable = callable
+      @times = times
+      @invocations = 0
+    end
+
+    def call(i)
+      if @invocations < @times
+        @repeated_value ||= @callable.call(i)
+      else
+        @invocations = 0
+        @repeated_value = @callable.call(i)
+      end
+
+      @invocations += 1
+      @repeated_value
+    end
+  end
+
   class Blueprint
     def initialize
       @columns = []
@@ -21,6 +41,11 @@ module CsvBlueprints
         else
           column_for_value(name, value)
         end
+    end
+
+    def columns(*names, value: nil, computed: nil)
+      repeated_value = RepeatedValue.new(computed, names.length) if computed
+      names.each { |name| column(name, value: value, computed: repeated_value) }
     end
 
     def plan

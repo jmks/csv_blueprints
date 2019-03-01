@@ -93,18 +93,37 @@ RSpec.describe CsvBlueprints do
       CSV
     end
 
-    xit "writes a single value to many columns" do
+    it "writes a single value to many columns" do
       blueprint = CsvBlueprints.specify do
-        column "Name", value: "Bobby Bobberson"
-        columns "Login", "Email", static: "bobby.bobberson@gmail.com"
+        column "Name", value: "Philip J Fry"
+        columns "Login", "Email", value: "philip.jfry@gmail.com"
       end
       plan = blueprint.plan.standard(1)
 
       out = plan.write
 
       expect(out.string).to eq(<<~CSV)
-      Name,Login,Email
-      Bobby Bobberson,bobby.bobberson@gmail.com,bobby.bobberson@gmail.com
+        Name,Login,Email
+        Philip J Fry,philip.jfry@gmail.com,philip.jfry@gmail.com
+      CSV
+    end
+
+    it "writes the same computed value for multiple columns" do
+      data_source = %w(Bender Flexo Bendher).cycle
+
+      blueprint = CsvBlueprints.specify do
+        column "Name", computed: -> i { "Bender #{i}"}
+        columns "Username", "Login", computed: -> i { data_source.next }
+      end
+      plan = blueprint.plan.standard(3)
+
+      out = plan.write
+
+      expect(out.string).to eq(<<~CSV)
+        Name,Username,Login
+        Bender 1,Bender,Bender
+        Bender 2,Flexo,Flexo
+        Bender 3,Bendher,Bendher
       CSV
     end
   end
