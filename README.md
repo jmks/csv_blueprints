@@ -1,4 +1,6 @@
-# CsvBlueprints
+# CSV Blueprints
+
+[![Build Status](https://travis-ci.com/jmks/csv_blueprints.svg?branch=master)](https://travis-ci.com/jmks/csv_blueprints)
 
 A simple and small DSL to generate CSV files.
 
