@@ -1,6 +1,8 @@
+require "simplecov"
+SimpleCov.start
+
 require "bundler/setup"
 require "csv_blueprints"
-
 require "pry"
 
 RSpec.configure do |config|
