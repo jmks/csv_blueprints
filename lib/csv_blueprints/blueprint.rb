@@ -34,18 +34,14 @@ module CsvBlueprints
       @columns = []
     end
 
-    def column(name, value: nil, computed: nil)
-      @columns <<
-        if computed
-          Column.new(name, computed)
-        else
-          column_for_value(name, value)
-        end
+    def column(name, value: nil)
+      @columns << column_for_value(name, value)
     end
 
-    def columns(*names, value: nil, computed: nil)
-      repeated_value = RepeatedValue.new(computed, names.length) if computed
-      names.each { |name| column(name, value: value, computed: repeated_value) }
+    def columns(*names, value:)
+      wrapped_value = value.respond_to?(:call) ? RepeatedValue.new(value, names.length) : value
+
+      names.each { |name| column(name, value: wrapped_value) }
     end
 
     def plan

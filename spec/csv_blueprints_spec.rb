@@ -51,7 +51,7 @@ RSpec.describe CsvBlueprints do
 
     it "writes computed values" do
       blueprint = CsvBlueprints.specify do
-        column "Robots", computed: -> i { "Bender #{i}" }
+        column "Robots", value: -> i { "Bender #{i}" }
       end
       plan = blueprint.plan.standard(3)
 
@@ -68,7 +68,7 @@ RSpec.describe CsvBlueprints do
     it "customizes values" do
       blueprint = CsvBlueprints.specify do
         column "Number", value: :sequence
-        column "Robots", computed: -> i { "Bender #{i}" }
+        column "Robots", value: -> i { "Bender #{i}" }
       end
 
       plan =
@@ -112,8 +112,8 @@ RSpec.describe CsvBlueprints do
       data_source = %w(Bender Flexo Bendher).cycle
 
       blueprint = CsvBlueprints.specify do
-        column "Name", computed: -> i { "Bender #{i}"}
-        columns "Username", "Login", computed: -> i { data_source.next }
+        column "Name", value: -> i { "Bender #{i}"}
+        columns "Username", "Login", value: -> i { data_source.next }
       end
       plan = blueprint.plan.standard(3)
 
