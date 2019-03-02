@@ -1,3 +1,4 @@
+require "csv_blueprints/plan"
 require "csv_blueprints/plan_writer"
 require "csv_blueprints/plan_builder"
 require "csv_blueprints/blueprint"
