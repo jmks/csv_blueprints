@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+IFS=$'\n\t'
+set -vx
+
+gem uninstall --all csv_blueprints
+gem build csv_blueprints.gemspec
+find . -name csv_blueprints*.gem -exec gem install {} \;
