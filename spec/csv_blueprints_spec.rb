@@ -9,7 +9,7 @@ RSpec.describe CsvBlueprints do
       end
       plan = blueprint.plan.standard(1)
 
-      out = plan.write
+      out = plan.write(StringIO.new)
 
       expect(out.string).to eql(<<~CSV)
         First Name,Last Name
@@ -25,7 +25,7 @@ RSpec.describe CsvBlueprints do
       end
       plan = blueprint.plan.standard(1)
 
-      out = plan.write
+      out = plan.write(StringIO.new)
 
       expect(out.string).to eql(<<~CSV)
         Name,Job,Income
@@ -39,7 +39,7 @@ RSpec.describe CsvBlueprints do
       end
       plan = blueprint.plan.standard(3)
 
-      out = plan.write
+      out = plan.write(StringIO.new)
 
       expect(out.string).to eql(<<~CSV)
         Count
@@ -55,7 +55,7 @@ RSpec.describe CsvBlueprints do
       end
       plan = blueprint.plan.standard(3)
 
-      out = plan.write
+      out = plan.write(StringIO.new)
 
       expect(out.string).to eql(<<~CSV)
         Robots
@@ -81,7 +81,7 @@ RSpec.describe CsvBlueprints do
       #         Header,Header2
       #         Value,Value2
       #       CSV
-      out = plan.write
+      out = plan.write(StringIO.new)
 
       expect(out.string).to eql(<<~CSV)
         Number,Robots
@@ -100,7 +100,7 @@ RSpec.describe CsvBlueprints do
       end
       plan = blueprint.plan.standard(1)
 
-      out = plan.write
+      out = plan.write(StringIO.new)
 
       expect(out.string).to eq(<<~CSV)
         Name,Login,Email
@@ -117,7 +117,7 @@ RSpec.describe CsvBlueprints do
       end
       plan = blueprint.plan.standard(3)
 
-      out = plan.write
+      out = plan.write(StringIO.new)
 
       expect(out.string).to eq(<<~CSV)
         Name,Username,Login

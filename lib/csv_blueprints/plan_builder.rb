@@ -15,7 +15,7 @@ module CsvBlueprints
       self
     end
 
-    def write(out = StringIO.new)
+    def write(out = STDOUT)
       PlanWriter.new(@plan).write(out)
     end
   end
