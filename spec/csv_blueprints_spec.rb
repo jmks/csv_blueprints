@@ -9,9 +9,7 @@ RSpec.describe CsvBlueprints do
       end
       plan = blueprint.plan.standard(1)
 
-      out = plan.write(StringIO.new)
-
-      expect(out.string).to eql(<<~CSV)
+      expect(plan).to write_csv(<<~CSV)
         First Name,Last Name
         Turd,Ferguson
       CSV
@@ -25,9 +23,7 @@ RSpec.describe CsvBlueprints do
       end
       plan = blueprint.plan.standard(1)
 
-      out = plan.write(StringIO.new)
-
-      expect(out.string).to eql(<<~CSV)
+      expect(plan).to write_csv(<<~CSV)
         Name,Job,Income
         Philip,Delivery Boy,
       CSV
@@ -39,9 +35,7 @@ RSpec.describe CsvBlueprints do
       end
       plan = blueprint.plan.standard(3)
 
-      out = plan.write(StringIO.new)
-
-      expect(out.string).to eql(<<~CSV)
+      expect(plan).to write_csv(<<~CSV)
         Count
         1
         2
@@ -55,9 +49,7 @@ RSpec.describe CsvBlueprints do
       end
       plan = blueprint.plan.standard(3)
 
-      out = plan.write(StringIO.new)
-
-      expect(out.string).to eql(<<~CSV)
+      expect(plan).to write_csv(<<~CSV)
         Robots
         Bender 1
         Bender 2
@@ -70,20 +62,12 @@ RSpec.describe CsvBlueprints do
         column "Number", value: :sequence
         column "Robots", value: -> i { "Bender #{i}" }
       end
+      plan = blueprint.plan
+               .customized(1, "Robots" => "Bendotron 3000")
+               .standard(2)
+               .customized(2, "Robots" => "Roomba")
 
-      plan =
-        blueprint.plan
-          .customized(1, "Robots" => "Bendotron 3000")
-          .standard(2)
-          .customized(2, "Robots" => "Roomba")
-
-      # TODO: expect(plan).to write(<<~CSV)
-      #         Header,Header2
-      #         Value,Value2
-      #       CSV
-      out = plan.write(StringIO.new)
-
-      expect(out.string).to eql(<<~CSV)
+      expect(plan).to write_csv(<<~CSV)
         Number,Robots
         1,Bendotron 3000
         2,Bender 2
@@ -100,9 +84,7 @@ RSpec.describe CsvBlueprints do
       end
       plan = blueprint.plan.standard(1)
 
-      out = plan.write(StringIO.new)
-
-      expect(out.string).to eq(<<~CSV)
+      expect(plan).to write_csv(<<~CSV)
         Name,Login,Email
         Philip J Fry,philip.jfry@gmail.com,philip.jfry@gmail.com
       CSV
@@ -113,13 +95,11 @@ RSpec.describe CsvBlueprints do
 
       blueprint = CsvBlueprints.specify do
         column "Name", value: -> i { "Bender #{i}"}
-        columns "Username", "Login", value: -> i { data_source.next }
+        columns "Username", "Login", value: -> _ { data_source.next }
       end
       plan = blueprint.plan.standard(3)
 
-      out = plan.write(StringIO.new)
-
-      expect(out.string).to eq(<<~CSV)
+      expect(plan).to write_csv(<<~CSV)
         Name,Username,Login
         Bender 1,Bender,Bender
         Bender 2,Flexo,Flexo

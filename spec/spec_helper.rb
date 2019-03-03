@@ -4,6 +4,9 @@ SimpleCov.start
 require "bundler/setup"
 require "csv_blueprints"
 require "pry"
+require 'rspec/expectations'
+
+require_relative "support/matchers/write_csv"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
