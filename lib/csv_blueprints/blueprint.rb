@@ -10,22 +10,34 @@ module CsvBlueprints
   end
 
   class RepeatedValue
-    def initialize(callable, times)
+    def initialize(callable, max_repetitions)
       @callable = callable
-      @times = times
-      @invocations = 0
+      @max_repetitions = max_repetitions
+      @repetitions = 0
+      @value = nil
     end
 
-    def call(i)
-      if @invocations < @times
-        @repeated_value ||= @callable.call(i)
-      else
-        @invocations = 0
-        @repeated_value = @callable.call(i)
-      end
+    def call(index)
+      calculate_value(index)
+      increment_repetitions
+      value
+    end
 
-      @invocations += 1
-      @repeated_value
+    private
+
+    attr_reader :value
+
+    def calculate_value(index)
+      if @repetitions < @max_repetitions
+        @value ||= @callable.call(index)
+      else
+        @repetitions = 0
+        @value = @callable.call(index)
+      end
+    end
+
+    def increment_repetitions
+      @repetitions += 1
     end
   end
 
