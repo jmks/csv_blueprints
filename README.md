@@ -4,6 +4,8 @@
 
 A simple and small DSL to generate CSV files.
 
+## Usage
+
 Declaratively specify a CSV blueprint:
 
 ```ruby
@@ -19,19 +21,17 @@ blueprint = CsvBlueprints.specify do
 end
 ```
 
-You can now use this blueprint to build a plan. You can override column values here as well:
+> We're using the [faker](https://github.com/stympy/faker) gem here for realistic names
+
+This one blueprint can generate multiple plans. E.g. differing numbers of rows or to override the row's values:
 
 ```ruby
-# only want 3 rows
+# three rows
 plan = blueprint.plan.standard(3)
-
-# two rows with duplicate IDs
-plan_with_duplicate_ids = blueprint.plan.customized(2, "ID" => 999, "Notes" => "A great person")
+plan.write
 ```
 
-Ready to write some CSVs? Just call `write(writable_io)` on the plan.
-
-`plan` would produce something like this (modulo `faker` data):
+will generate a CSV like:
 
 ```
 ID,Name,Login,Email,Type,Notes
@@ -40,12 +40,20 @@ ID,Name,Login,Email,Type,Notes
 3,Mrs. Bennett Bechtelar,email3@example.com,email3@example.com,Client,
 ```
 
-while `plan_with_duplicate_ids` would produce something like:
+Another plan from the same blueprint
+
+```ruby
+# two rows with duplicate IDs and a note
+plan_with_duplicate_ids = blueprint.plan.customized(2, "ID" => 999, "Notes" => "Imported on #{Date.today.strftime('%Y-%m-%d')}")
+plan_with_duplicate_ids.write
+```
+
+would generate
 
 ```
 ID,Name,Login,Email,Type,Notes
-999,Harry Cummings Sr.,email1@example.com,email1@example.com,Client,A great person
-999,Mrs. Dessie Wunsch,email2@example.com,email2@example.com,Client,A great person
+999,Tiffanie Schaden,email1@example.com,email1@example.com,Client,Imported on 2019-03-04
+999,Mr. Arie Stroman,email2@example.com,email2@example.com,Client,Imported on 2019-03-04
 ```
 
 ## Installation
@@ -53,7 +61,7 @@ ID,Name,Login,Email,Type,Notes
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'csv_blueprints'
+gem "csv_blueprints"
 ```
 
 And then execute:
@@ -63,10 +71,6 @@ And then execute:
 Or install it yourself as:
 
     $ gem install csv_blueprints
-
-## Usage
-
-TODO: Write usage instructions here
 
 ## Development
 
