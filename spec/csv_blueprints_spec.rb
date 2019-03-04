@@ -15,7 +15,7 @@ RSpec.describe CsvBlueprints do
       CSV
     end
 
-    it "writes empty values" do
+    it "writes :blank value as empty string" do
       blueprint = CsvBlueprints.specify do
         column "Name", value: "Philip"
         column "Job", value: "Delivery Boy"
@@ -29,7 +29,7 @@ RSpec.describe CsvBlueprints do
       CSV
     end
 
-    it "writes sequences" do
+    it "writes :sequence as sequential numbers" do
       blueprint = CsvBlueprints.specify do
         column "Count", value: :sequence
       end
@@ -43,7 +43,7 @@ RSpec.describe CsvBlueprints do
       CSV
     end
 
-    it "writes computed values" do
+    it "writes values computed from lambdas" do
       blueprint = CsvBlueprints.specify do
         column "Robots", value: -> i { "Bender #{i}" }
       end
@@ -57,7 +57,7 @@ RSpec.describe CsvBlueprints do
       CSV
     end
 
-    it "customizes values" do
+    it "writes customized values" do
       blueprint = CsvBlueprints.specify do
         column "Number", value: :sequence
         column "Robots", value: -> i { "Bender #{i}" }
@@ -77,7 +77,7 @@ RSpec.describe CsvBlueprints do
       CSV
     end
 
-    it "writes a single value to many columns" do
+    it "writes the same value to multipl columns" do
       blueprint = CsvBlueprints.specify do
         column "Name", value: "Philip J Fry"
         columns "Login", "Email", value: "philip.jfry@gmail.com"
@@ -90,7 +90,7 @@ RSpec.describe CsvBlueprints do
       CSV
     end
 
-    it "writes the same computed value for multiple columns" do
+    it "writes the same value computed from a lambda to multiple columns" do
       data_source = %w(Bender Flexo Bendher).cycle
 
       blueprint = CsvBlueprints.specify do
